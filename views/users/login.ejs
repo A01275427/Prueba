@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/favicon.ico">
     <title>LeadCharts</title>
 </head>
 <body>
@@ -11,14 +12,12 @@
         <nav class="bg-slate-200 border-gray-100 border-b-4">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a class="flex items-center">
-                    <img src="leadChartsLogo.png" class="h-16 mr-5" alt="Logo" />
+                    <img src="/leadChartsLogo.png" class="h-16 mr-5" alt="Logo"/>
                 </a>
-                <div class="text-center font-sans my-10 text-bold text-4xl text-indigo-600">
-                    <span>Login</span>
-                </div class="text-center font-sans my-10 text-bold text-4xl text-indigo-600">
-                <div class="text-center font-sans my-10 text-bold text-xl text-indigo-600">
-                    <a>Registrate</a>
+                <div class="font-sans my-10 mr-40 text-bold text-4xl text-indigo-600">
+                    <a>Login</a>
                 </div>
+                <a href="/users/signUp" class="text-center font-sans my-10 text-bold text-xl text-indigo-600">Registrate</a>
             </div>
         </nav>
     </header>
@@ -31,21 +30,24 @@
                 <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
                     <div class="max-w-md mx-auto">
                         <div>
-                            <h1 class="text-2xl font-semibold">Login</h1>
+                            <h1 class="text-2xl font-semibold ml-4">Login</h1>
                         </div>
                         <div class="divide-y divide-gray-200">
                             <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                                <div class="relative">
-                                    <input autocomplete="off" id="" name="" type="text" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600" placeholder="Email address" />
-                                    <label for="email" class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email Address</label>
-                                </div>
-                                <div class="relative">
-                                    <input autocomplete="off" id="" name="" type="password" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600" placeholder="Password" />
-                                    <label for="password" class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Password</label>
-                                </div>
-                                <div class="relative">
-                                    <button class="bg-blue-500 text-white rounded-md px-2 py-1">Submit</button>
-                                </div>
+                                <form action="/users/login" method="POST">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
+                                    <div class="relative">
+                                        <input autocomplete="off" id="emailUser" name="emailUser" type="text" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600" placeholder="Email address" />
+                                        <label for="email" class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email Address</label>
+                                    </div>
+                                    <div class="relative">
+                                        <input autocomplete="off" id="passwordUser" name="passwordUser" type="password" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600" placeholder="Password" />
+                                        <label for="password" class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Password</label>
+                                    </div>
+                                    <div class="relative">
+                                        <button class="bg-blue-500 text-white rounded-md px-2 py-1">Submit</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -28,7 +28,9 @@ exports.postUpload = (request, response, next) => {
 
         for (let row of results.data) {
             const gainValue = parseFloat(row['Ganado']);
+
             const gain = isNaN(gainValue) ? null : gainValue;
+            
             const lastMessageDateParsed = moment(row['Fecha de último mensaje'], 'DD/MM/YY').format('YYYY-MM-DD');
             if (lastMessageDateParsed === "Invalid date") {
                 console.error("Fecha inválida encontrada en la fila:", row);
@@ -48,10 +50,15 @@ exports.postUpload = (request, response, next) => {
             if (lastMessageTimeParsed === "Invalid date") {
                 console.error("Hora inválida encontrada en la fila:", row);
             }
-            
+
+            const phone = parseFloat(row["Teléfono"]);
+
+            const parsedPhone = `+ (${phone.toString().slice(0, 3)})-${phone
+                .toString()
+                .slice(3, 6)}-${phone.toString().slice(6, 9)}-${phone.toString().slice(9, 21)}`;
 
             const lead = new Lead({
-                phone: row['Teléfono'] || " ",
+                phone: parsedPhone || " ",
                 name: row['Nombre'] || " ",
                 value: row['Valor $'] || null,
                 gain: gain,
@@ -93,4 +100,3 @@ exports.postTest = (request, response, next) => {
     
     response.send('POST success');
 };
-

@@ -15,8 +15,17 @@ module.exports = class User {
         .then((encryptedPassword) => {
             return db.execute(
                 'INSERT INTO users(nameUser, lastNameUser, emailUser, passwordUser) VALUES (?, ?, ?, ?)', 
-                [this.nameUser, this.lastNameUser, this.emailUser, encryptedPassword]);
-        }).catch((error) => {console.log(error)}); 
+                [this.nameUser, this.lastNameUser, this.emailUser, encryptedPassword]
+            );
+        })
+        .then((result) => {
+            // Obtener el idUser generado
+            const idUser = result[0].insertId;
+
+            // Insertar el registro en la tabla usersroles
+            return db.execute('INSERT INTO usersroles(idUser, idRole) VALUES (?, ?)', [idUser, 1]);
+        })
+        .catch((error) => {console.log(error)}); 
     }
 
     static fetchOne(emailUser) {
@@ -31,8 +40,8 @@ module.exports = class User {
             WHERE u.idUser = ?
             AND u.idUser = ur.idUser
             AND ur.idRole = r.idRole
-            AND rp.idRol = r.idRole
-            AND rp.idPriviledge = p.idPrivilegde`, 
+            AND rp.idRole = r.idRole
+            AND rp.idPriviledge = p.idPriviledge`, 
             [idUser]);
     }
 }

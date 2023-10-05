@@ -50,6 +50,9 @@ app.use('/leads', routesLeads);
 const routesUsers = require('./routes/users.routes');
 app.use('/users', routesUsers);
 
+const routesReports = require('./routes/reports.routes');
+app.use('/leads', routesReports);
+
 
 app.use((request, response, next) => {
     response.statusCode = 404;
@@ -69,7 +72,7 @@ app.use((request, response, next) => {
             <nav class="bg-white border-gray-100 border-b-4">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a class="flex items-center">
-                        <img src="leadChartsLogo.png" class="h-16 mr-5" alt="Flowbite Logo" />
+                        <img src="/leadChartsLogo.png" class="h-16 mr-5" alt="leadChartsLogo" />
                     </a>
                 </div>
             </nav>

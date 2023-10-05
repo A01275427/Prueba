@@ -46,34 +46,41 @@ exports.getLogin = (request, response, next) => {
 };
 
 exports.postLogin = (request, response, next) => {
-    User.fetchOne(request, body, nameUser)
-        .then(([users, fieldData]) => {
 
-            const user = users[0];
+    User.fetchOne(request.body.emailUser)
+    .then(([users, fieldData]) => {
 
-            if (users.lenght > 0) {
-                bcrypt.compare(request.body.passwordUser, user.passwordUser)
-                    .then(doMatch => {
-                        if (doMatch) {
-                            request.session.isLoggedIn = true;
-                            request.session.user = user;
-                            User.getPriviledges(user.idUser)
-                                .then(([priviledges, fieldData]) => {
-                                    request.session.priviledges = priviledges;
-                                    response.redirect('/');
-                                }).catch(error => {
-                                    console.error(error);
-                                    response.redirect('/users/login');
-                                });
-                        }
+        const user = users[0];
+
+        if (users.length > 0) {
+            bcrypt.compare(request.body.passwordUser, user.passwordUser)
+            .then(doMatch => {
+                if (doMatch) {
+                    request.session.isLoggedIn = true;
+                    request.session.user = user;
+                    User.getPriviledge(user.idUser)
+                    .then(([priviledges, fieldData]) => {
+                        console.log("Aquí empiezan los privilegios");
+                        console.log(priviledges);
+                        console.log("Aqui terminan los privilegios");
+                        return request.session.save(err => {
+                            request.session.priviledges = priviledges;
+                            response.redirect('/leads/upload');
+                        });
                     }).catch(error => {
-                        console.log(error);
-                        response.redirect('users/login');
+                        console.error(error);
+                        response.redirect('/users/login');
                     });
-            } else {
-                response.redirect('users/login');
-            }
-        }).catch((error) => {
-            console.log(error);
-        });
-}
+                }
+
+            }).catch(error => {
+                console.log(error);
+                response.redirect('/users/login');
+            });
+        } else {
+            response.redirect('/users/login');
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+};
