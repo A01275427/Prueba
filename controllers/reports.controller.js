@@ -1,7 +1,9 @@
-
+const ReportsModel = require('../models/reports.model');
 
 exports.getReport = (request, response, next) => {
-    response.render('leads/report.ejs', {});
+    ReportsModel.getDataForCharts()
+        .then(([rows, fieldData]) => {
+            response.render('leads/report.ejs', { data: rows });
+        })
+        .catch(err => console.log(err));
 };
-
-exports.postReport = (request, response, next) => {};
