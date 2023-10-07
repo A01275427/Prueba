@@ -1,0 +1,39 @@
+<%- include('../includes/head.ejs') %>
+
+<input id="_csrf" type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+<h1 class="text-2xl font-bold p-4 text-center font-sans">Listado de Usuarios</h1>
+    
+    <div id="users">
+        <div class="flex mx-10">
+            <div class="w-1/3 p-4">
+                <h1 class="text-xl font-semibold text-center">Nombre</h1>
+            </div>
+            <div class="w-1/3 p-4">
+                <h1 class="text-xl font-semibold text-center">Apellido</h1>
+            </div>
+            <div class="w-1/3 p-4">
+                <h1 class="text-xl font-semibold text-center">E-mail</h1>
+            </div>
+        </div>
+        <br>
+        <% for(let user of users) { %>
+            <div class="flex bg-gray-200 rounded-lg mx-10 shadow-md">
+                <div class="w-1/3 p-4">
+                    <!-- Contenido de la primera columna -->
+                    <h2 class="text-lg font-semibold text-center"><%= user.nameUser %></h2>
+                </div>
+                <div class="w-1/3 p-4">
+                    <!-- Contenido de la segunda columna -->
+                    <h2 class="text-lg font-semibold text-center"><%= user.lastNameUser %></h2>
+                </div>
+                <div class="w-1/3 p-4">
+                    <!-- Contenido de la tercera columna -->
+                    <h2 class="text-lg font-semibold text-center"><%= user.emailUser %></h2>
+                </div>
+            </div>
+            <br>
+        <% } %>
+    </div>
+
+<%- include('../includes/foot.ejs') %>

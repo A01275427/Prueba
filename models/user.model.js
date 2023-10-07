@@ -33,6 +33,19 @@ module.exports = class User {
             [emailUser]);
     }
 
+    static fetchAll() {
+        return db.execute('SELECT * FROM users');
+    }
+
+    static fetch(id) {
+        if (id) {
+            return db.execute('SELECT * FROM users WHERE id = ?', 
+            [id]);
+        } else {
+            return this.fetchAll();
+        }
+    }
+
     static getPriviledge(idUser) {
         return db.execute(
             `SELECT p.namePriviledge

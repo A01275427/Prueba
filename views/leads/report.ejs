@@ -1,53 +1,54 @@
 <%- include('../includes/head.ejs') %>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <main>
-        <div class="container mx-auto px-4 py-8">
-            <h1 class="text-2xl font-bold mb-6">Gráficas Dinámicas</h1>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4">Gráfica de Barras</h2>
-                    <canvas id="barChart"></canvas>
-                </div>
+<main>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">Gráficas Dinámicas</h1>
 
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4">Gráfica de Pastel</h2>
-                    <canvas id="pieChart"></canvas>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Gráfica de Barras</h2>
+                <canvas id="barChart"></canvas>
+            </div>
 
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4">Gráfica de Barras Horizontal</h2>
-                    <canvas id="horizontalBarChart"></canvas>
-                </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Gráfica de Pastel</h2>
+                <canvas id="pieChart"></canvas>
+            </div>
 
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4">Grafica de Burbujas</h2>
-                    <canvas id="lineChart"></canvas>
-                </div>
-                
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Gráfica de Barras Horizontal</h2>
+                <canvas id="horizontalBarChart"></canvas>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Grafica de Linea</h2>
+                <canvas id="lineChart"></canvas>
             </div>
         </div>
-    </main>
-    <script>
+        </section>
+    </div>
+</main>
 
-        const barData = {
+<script>
+  const barData = {
             labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
             datasets: [{
                 label: 'Ventas',
                 data: [12, 19, 3, 5, 2],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
+                    '#9333EA',
+                    '#A855F7',
+                    '#C084FC',
+                    '#9333EA',
+                    '#A855F7'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
+                    '#9333EA',
+                    '#A855F7',
+                    '#C084FC',
+                    '#9333EA',
+                    '#A855F7'
                 ],
                 borderWidth: 1
             }]
@@ -68,19 +69,19 @@
         const barChart = new Chart(document.getElementById('barChart'), barConfig);
 
         const pieData = {
-            labels: ['Rojo', 'Azul', 'Amarillo'],
+            labels: ['Josue', 'Mario', 'Gonzalo'],
             datasets: [{
-                label: 'Colores',
+                label: 'Horas',
                 data: [10, 20, 30],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
+                    '#9333EA',
+                    '#A855F7',
+                    '#C084FC'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
+                    '#9333EA',
+                    '#A855F7',
+                    '#C084FC'
                 ],
                 borderWidth: 1
             }]
@@ -99,18 +100,18 @@
                 label: 'Ventas',
                 data: [12, 19, 13, 15, 12],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)'
+                    '#9333EA',
+                    '#A855F7',
+                    '#C084FC',
+                    '#9333EA',
+                    '#A855F7'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)'
+                    '#9333EA',
+                    '#A855F7',
+                    '#C084FC',
+                    '#9333EA',
+                    '#A855F7'
                 ],
                 borderWidth: 2
             }]
@@ -142,70 +143,37 @@
         const horizontalBarChart = new Chart(document.getElementById('horizontalBarChart'), horizontalBarConfig);
 
         const lineData = {
-        // Aquí debes definir tus datos para la gráfica de línea
-        // Por ejemplo:
-        labels: ['Enero', 'Febrero', 'Marzo'],
-        datasets: [
-        {
-            label: 'Serie 1',
-            data: [10, 20, 30, 40, 50], 
-            borderColor: 'rgba(255, 99, 132, 1)',
-            yAxisID: 'y'
-        },
-        {
-            label: 'Serie 2',
-            data: [5, 15, 25, 35, 45],
-            borderColor: 'rgba(54, 162, 235, 1)',
-            yAxisID: 'y1'
-        },
-        {
-            label: 'Serie 3',
-            data: [12, 22, 32, 42, 52],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            yAxisID: 'y'
-        }]
-    };
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'], 
+            datasets: [{
+                label: 'Ventas',
+                data: [10, 15, 8, 12, 14], 
+                borderColor: '#9333EA',
+                backgroundColor: '#C084FC',
+                borderWidth: 1,
+                fill: false
+            }]
+        };
 
-    const lineConfig = {
-        type: 'line',
-        data: lineData,
-        options: {
-            responsive: true,
-            interaction: {
-                mode: 'index',
-                intersect: false,
+const lineConfig = {
+    type: 'line',
+    data: lineData,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
             },
-            stacked: false,
-            plugins: {
-                title: {
-                    display: true,
-                    text: ''
-                }
-            },
-            scales: {
-                y: {
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                },
-                y1: {
-                    type: 'linear',
-                    display: true,
-                    position: 'right',
-                    grid: {
-                    drawOnChartArea: false,
-                    },
-                },
+            title: {
+                display: true,
+                text: ''
             }
-        },
-    };
+        }
+    }
+};
 
-    const lineChart = new Chart(document.getElementById('lineChart'), lineConfig);
+const lineChart = new Chart(document.getElementById('lineChart'), lineConfig);
 
-
+        
 </script>
-</body>
-</html>
-</div>
 
 <%- include('../includes/foot.ejs') %>

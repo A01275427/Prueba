@@ -13,8 +13,11 @@
                 <label for="importCSV" class="z-20 flex flex-col-reverse items-center justify-center w-full h-full cursor-pointer">
                     <p class="z-10 text-xs font-light text-center text-gray-500">Drag & Drop your files here</p>
                 </label>
-                <input type="submit" name="submit" class="bg-blue-500 text-white rounded-md px-2 py-1" value="Subir">
-            </form>
+                <input type="submit" name="submit" class="bg-blue-500 text-white rounded-md px-2 py-1" value="Subir">              
+                <div id="loading" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-400 hidden">
+                    <i class="fas fa-spinner fa-spin text-4xl text-white"></i>
+                </div>
+            </form>    
         </div>
     </div>
 </div>

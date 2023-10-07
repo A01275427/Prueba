@@ -8,6 +8,8 @@ exports.getUpload = (request, response, next) => {
     response.render('leads/leadUpload.ejs', {  });
 };
 
+const delay = ms => new Promise(res => setTimeout(res, ms)); // Para el loading
+
 exports.postUpload = (request, response, next) => {
     console.log('controlador');
     console.log(request.body);
@@ -83,8 +85,8 @@ exports.postUpload = (request, response, next) => {
             });
             await lead.insertLead();
         }
-
         fs.unlinkSync(filePath); // Borrar archivo después de leer
+        await delay(2000);
         response.redirect('/leads/upload'); // O redirige a donde prefieras
     });
 };

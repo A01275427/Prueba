@@ -84,3 +84,33 @@ exports.postLogin = (request, response, next) => {
         console.log(error);
     });
 };
+
+exports.getConsultUsers = (request, response, next) => {
+
+    User.fetch(request.params.id)
+        .then(([rows, fieldData]) => {
+            console.log(rows);
+            console.log(fieldData);
+
+            return response.render('users/consultUsers.ejs', {
+                users: rows,
+                nameUser: request.session.nameUser || '',
+                isLoggedIn: request.session.isLoggedIn || false,
+                priviledges: request.session.priviledges || [],
+            });
+        
+        }).catch((error) => {
+            console.log(error);
+            response.redirect('/leads/upload');
+        });
+};
+
+exports.getLogout = (request, response, next) => {
+    request.session.destroy((error) => {
+        if (error) {
+            console.log(error);
+            return response.redirect('/');
+        }
+        response.redirect('/users/login');
+    });
+};
