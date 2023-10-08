@@ -1,13 +1,13 @@
 {
-  "name": "prueba",
+  "name": "tec-ag-23-tecdevs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Proyecto para Leadsales | Materia TC2005B ITESM Campus Qro",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon"
   },
-  "author": "",
+  "author": "TecDevs",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,8 +22,10 @@
     "moment": "^2.29.4",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.1",
-    "nodemon": "^3.0.1",
-    "npm": "^10.2.0",
+    "npm": "^10.1.0",
     "papaparse": "^5.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
