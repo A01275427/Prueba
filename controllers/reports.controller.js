@@ -1,4 +1,6 @@
 const ReportsModel = require('../models/reports.model');
+response.render('leads/report', { months: months, sales: sales });
+
 
 exports.getReport = async (request, response, next) => {
     try {
@@ -21,4 +23,15 @@ exports.postReport = async (request, response, next) => {
     } catch (error) {
         console.error(error);
     }
+};
+
+exports.generateReports = (request, response, next) => {
+    Report.fetchData()
+    .then(([data, fieldData]) => {
+        response.render('/views/leads/report.ejs', {data: data});
+    })
+    .catch((error) => {
+        console.log(error);
+        response.redirect('/');
+    });
 };

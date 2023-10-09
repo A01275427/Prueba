@@ -20,3 +20,9 @@ exports.addReport = async (reportData) => {
         console.error(error);
     }
 };
+
+module.exports = class Report {
+    static fetchData() {
+        return db.execute('SELECT * FROM leads');
+    }
+};
