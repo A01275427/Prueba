@@ -26,12 +26,11 @@
                 <canvas id="lineChart"></canvas>
             </div>
         </div>
-        </section>
     </div>
 </main>
 
 <script>
-/*
+
   const barData = {
             labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
             datasets: [{
@@ -173,29 +172,41 @@ const lineConfig = {
 };
 
 const lineChart = new Chart(document.getElementById('lineChart'), lineConfig);
-*/
-
-fetch('/leads')
-            .then(response => response.json())
-            .then(data => {
-                const labels = data.map(item => item.label); // Asumiendo que tus leads tienen un campo 'label'
-                const values = data.map(item => item.value); // Asumiendo que tus leads tienen un campo 'value'
-
-                const ctx = document.getElementById('leadsChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line', // o 'bar', 'pie', etc., según lo que prefieras
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Leads Data',
-                            data: values,
-                            borderColor: 'blue',
-                            fill: false
-                        }]
-                    }
-                });
-            });
-        
 </script>
+
+<script>
+    fetch('/leads/data')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('leadsChart').getContext('2d');
+            const labels = data.map(lead => lead.name); // Asumiendo que tus leads tienen un campo 'name'
+            const values = data.map(lead => lead.value); // Asumiendo que tus leads tienen un campo 'value'
+
+            new Chart(ctx, {
+                type: 'bar', // Puedes cambiar el tipo de gráfica según tus necesidades
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Leads Data',
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar los datos de los leads:', error);
+        });
+</script>
+
 
 <%- include('../includes/foot.ejs') %>

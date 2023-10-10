@@ -30,7 +30,7 @@ exports.getLeads = (request, response, next) => {
         response.json(leads);
     }catch(error){
         console.error(error);
-        response.status(500).json({message: 'Error al obtener los leads'});
+        response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
 
