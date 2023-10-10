@@ -31,11 +31,12 @@
 </main>
 
 <script>
+/*
   const barData = {
             labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
             datasets: [{
                 label: 'Ventas',
-                data: [12, 19, 3, 5, 2],
+                data: [19, 13, 15, 12, 9],
                 backgroundColor: [
                     '#9333EA',
                     '#A855F7',
@@ -172,7 +173,28 @@ const lineConfig = {
 };
 
 const lineChart = new Chart(document.getElementById('lineChart'), lineConfig);
+*/
 
+fetch('/leads')
+            .then(response => response.json())
+            .then(data => {
+                const labels = data.map(item => item.label); // Asumiendo que tus leads tienen un campo 'label'
+                const values = data.map(item => item.value); // Asumiendo que tus leads tienen un campo 'value'
+
+                const ctx = document.getElementById('leadsChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line', // o 'bar', 'pie', etc., según lo que prefieras
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Leads Data',
+                            data: values,
+                            borderColor: 'blue',
+                            fill: false
+                        }]
+                    }
+                });
+            });
         
 </script>
 

@@ -25,30 +25,13 @@ exports.postReport = async (request, response, next) => {
 
 exports.getLeads = (request, response, next) => {
     
-    ReportsModel.fetchAll()
-    .then(([leads, fieldData]) => {
-
-        const lead = leads[0];
-
-        if(leads.length > 0) {
-            bcrypt.compare(request.body.name, lead.name)
-            .then(doMatch => {
-                if(doMatch){
-                    ReportsModel.getLeads(lead.leads)
-                    .then(([leads, fieldData]) => {
-                        console.log(leads)
-                    })
-                }
-            }).catch(error => {
-                console.log(error);
-                response.redirect('/leads/reports');
-            });
-        } else {
-            response.redirect('/leads/reports');
-        }
-    }).catch((error) => {
-        console.log(error);
-    });
+    try{
+        const leads = ReportsModel.fetchLeads();
+        response.json(leads);
+    }catch(error){
+        console.error(error);
+        response.status(500).json({message: 'Error al obtener los leads'});
+    }
 };
 
 

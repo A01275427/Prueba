@@ -4,16 +4,19 @@ const mysql = require('mysql2');
 module.exports = class ReportsModel{
 
     constructor(leads){
-        this.leads = leads;
+        this.reportData = reportData;
     }
 
     save(){
-        return db.execute('INSERT INTO leads(leads) VALUES (?)'
-        [this.leads]);
+        return db.execute('INSERT INTO reports SET ?', [this.reportData]);
     }
 
     static fetchAll(){
-        return db.execute('SELECT phone, stage FROM leads');
+        return db.execute('SELECT * FROM reports');
+    }
+
+    static fetchLeads(){
+        return db.execute('SELECT * FROM leads');
     }
 
 
