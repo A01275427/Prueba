@@ -25,8 +25,8 @@ exports.postReport = async (request, response, next) => {
 
 exports.getLeads = (request, response, next) => {
     
-    ReportsModel.fetchAll(request.body.leads)
-    .then(([users, fieldData]) => {
+    ReportsModel.fetchAll()
+    .then(([leads, fieldData]) => {
 
         const lead = leads[0];
 
@@ -50,6 +50,7 @@ exports.getLeads = (request, response, next) => {
         console.log(error);
     });
 };
+
 
 // Agregar un nuevo reporte
 exports.addReport = async (reportData) => {
