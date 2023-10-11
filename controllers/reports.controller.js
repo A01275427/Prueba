@@ -27,12 +27,23 @@ exports.getLeads = async (request, response, next) => {
     
     try{
         const leads = ReportsModel.fetchLeads();
-        response.render('../views/leads/report.ejs', {leads: leads});
+        response.render('leads/report.ejs', {leads: leads});
     }catch(error){
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
+
+exports.getLeadsData = async (request, response, next) => {
+    try{
+        const leadsData = await ReportsModel.fetchLeads();
+        response.json(leadsData);
+    }catch(error){
+        console.error(error);
+        response.status(500).json({message: 'Error al obtener los leads'});
+    }
+};
+
 
 
 // Agregar un nuevo reporte
