@@ -23,11 +23,11 @@ exports.postReport = async (request, response, next) => {
 };
 
 
-exports.getLeads = (request, response, next) => {
+exports.getLeads = async (request, response, next) => {
     
     try{
         const leads = ReportsModel.fetchLeads();
-        response.json(leads);
+        response.render('../views/leads/report.ejs', {leads: leads});
     }catch(error){
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
