@@ -16,7 +16,7 @@ module.exports = class ReportsModel{
     }
 
     static fetchLeads(){
-        return db.execute('SELECT createdAt, idLeads FROM leads');
+        return db.execute('SELECT createdAt, idLead FROM leads');
     }
 
 
