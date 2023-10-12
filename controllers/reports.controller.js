@@ -1,7 +1,7 @@
 const ReportsModel = require('../models/reports.model');
 const bcrypt = require('bcryptjs');
 
-
+/*
 exports.getReport = async (request, response, next) => {
     try {
         const reports = await ReportsModel.fetchAll();
@@ -21,7 +21,7 @@ exports.postReport = async (request, response, next) => {
         console.error(error);
     }
 };
-
+*/
 
 exports.getLeads = async (request, response, next) => {
     
@@ -45,7 +45,7 @@ exports.getLeadsData = async (request, response, next) => {
 };
 
 
-
+/*
 // Agregar un nuevo reporte
 exports.addReport = async (reportData) => {
     try {
@@ -66,3 +66,4 @@ exports.fetchAll = async () => {
         console.error(error);
     }
 };
+*/
