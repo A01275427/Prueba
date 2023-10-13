@@ -23,9 +23,11 @@
                     <li>
                         <a href="/leads/reports" id="button2" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 border-0 hover:text-blue-700 p-0 font-mono">Reportes</a>
                     </li>
+                    <% if (canConsultUsers) { %>
                     <li>
                         <a href="/users/consultUsers" id="button3" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 border-0 hover:text-blue-700 p-0 font-mono">Usuario</a>
                     </li>
+                    <% } %>
                     <li>
                         <a href="/users/logout" id="button4" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 border-0 hover:text-blue-700 p-0 font-mono">Logout</a>
                     </li>

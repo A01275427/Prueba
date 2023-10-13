@@ -5,7 +5,14 @@ const Lead = require('../models/leads.model');
 const moment = require('moment');
 
 exports.getUpload = (request, response, next) => {
-    response.render('leads/leadUpload.ejs', {  });
+    console.log(request.session.priviledges);
+    response.render('leads/leadUpload.ejs', { 
+        uploaded: false,
+        canUpload: request.canUpload,
+        canConsultReports: request.canConsultReports,
+        canConsultUsers: request.canConsultUsers,
+    });
+
 };
 
 const delay = ms => new Promise(res => setTimeout(res, ms)); // Para el loading
@@ -87,7 +94,13 @@ exports.postUpload = (request, response, next) => {
         }
         fs.unlinkSync(filePath); // Borrar archivo después de leer
         await delay(2000);
-        response.redirect('/leads/upload'); // O redirige a donde prefieras
+        // response.redirect('/leads/upload'); // O redirige a donde prefieras
+        response.render('leads/leadUpload.ejs', { 
+            uploaded: true,
+            canUpload: request.canUpload,
+            canConsultReports: request.canConsultReports,
+            canConsultUsers: request.canConsultUsers,
+        });
     });
 };
 

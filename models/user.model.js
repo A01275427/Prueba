@@ -5,25 +5,24 @@ module.exports = class User {
     
     constructor(newUser) {
         this.nameUser = newUser.nameUser || "Iván";
-        this.lastNameUser = newUser.lastNameUSer || "Paredes";
+        this.lastNameUser = newUser.lastNameUser || "Paredes";
         this.emailUser = newUser.emailUser || "ivan@leadsales.io";
         this.passwordUser = newUser.passwordUser || "Hola123";
+        this.team = newUser.team || this.emailUser;
+        this.idRole = newUser.idRole || 1; // Asumiendo 1 como el valor por defecto.
     }
 
     save() {
         return bcrypt.hash(this.passwordUser, 12)
         .then((encryptedPassword) => {
             return db.execute(
-                'INSERT INTO users(nameUser, lastNameUser, emailUser, passwordUser) VALUES (?, ?, ?, ?)', 
-                [this.nameUser, this.lastNameUser, this.emailUser, encryptedPassword]
+                'INSERT INTO users(nameUser, lastNameUser, emailUser, passwordUser, team) VALUES (?, ?, ?, ?, ?)', 
+                [this.nameUser, this.lastNameUser, this.emailUser, encryptedPassword, this.team]
             );
         })
         .then((result) => {
-            // Obtener el idUser generado
             const idUser = result[0].insertId;
-
-            // Insertar el registro en la tabla usersroles
-            return db.execute('INSERT INTO usersroles(idUser, idRole) VALUES (?, ?)', [idUser, 1]);
+            return db.execute('INSERT INTO usersroles(idUser, idRole) VALUES (?, ?)', [idUser, this.idRole]);
         })
         .catch((error) => {console.log(error)}); 
     }
@@ -45,6 +44,10 @@ module.exports = class User {
             return this.fetchAll();
         }
     }
+    static fetchByTeam(teamValue) {
+        return db.execute('SELECT * FROM users WHERE team = ?', [teamValue]);
+    }
+    
 
     static getPriviledge(idUser) {
         return db.execute(

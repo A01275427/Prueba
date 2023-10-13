@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const Button3 = document.getElementById("button3");
 
     // Si la ruta es '/leads/reports', cambia el color a azul
-    if (currentPath === '/user') {
+    if (currentPath === '/users/consultUsers') {
         Button3.classList.add("text-blue-700");
         Button3.classList.remove("text-gray-900");
     }

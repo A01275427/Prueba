@@ -24,6 +24,7 @@ exports.postSignUp = (request, response, next) => {
         lastNameUser: request.body.lastNameUser,
         emailUser: request.body.emailUser,
         passwordUser: request.body.passwordUser,
+        team: request.body.team,
     });
 
     user.save()
@@ -42,6 +43,9 @@ exports.getLogin = (request, response, next) => {
         nameUser: '',
         isLoggedIn: request.session.isLoggedIn || false,
         priviledges: request.session.priviledges || [],
+        errorPriviledge: false, 
+        errorAccount: false, 
+        databaseError: false
     });
 };
 
@@ -60,34 +64,37 @@ exports.postLogin = (request, response, next) => {
                     request.session.user = user;
                     User.getPriviledge(user.idUser)
                     .then(([priviledges, fieldData]) => {
-                        console.log("Aquí empiezan los privilegios");
-                        console.log(priviledges);
-                        console.log("Aqui terminan los privilegios");
                         return request.session.save(err => {
                             request.session.priviledges = priviledges;
+                            //Login Exitoso
                             response.redirect('/leads/upload');
                         });
                     }).catch(error => {
+                        //Error al obtener privilegios
                         console.error(error);
-                        response.redirect('/users/login');
+                        response.render('users/login.ejs', { errorPriviledge: true, errorAccount: false, databaseError: false });
                     });
                 }
-
             }).catch(error => {
+                //Error al comparar contraseñas
                 console.log(error);
-                response.redirect('/users/login');
+                response.render('users/login.ejs', { errorPriviledge: false, errorAccount: true, databaseError: false });
             });
         } else {
-            response.redirect('/users/login');
+            //El correo no existe en la base de datos
+            response.render('users/login.ejs', { errorPriviledge: false, errorAccount: true, databaseError: false });
         }
     }).catch((error) => {
+        //Error tratando de conectar con la base de datos
         console.log(error);
+        response.render('users/login.ejs', { errorPriviledge: false, errorAccount: false, databaseError: true });
     });
 };
 
 exports.getConsultUsers = (request, response, next) => {
+    const teamValue = request.session.user.team;  // Obtener el valor de "team" de la sesión actual
 
-    User.fetch(request.params.id)
+    User.fetchByTeam(teamValue)
         .then(([rows, fieldData]) => {
             console.log(rows);
             console.log(fieldData);
@@ -97,6 +104,10 @@ exports.getConsultUsers = (request, response, next) => {
                 nameUser: request.session.nameUser || '',
                 isLoggedIn: request.session.isLoggedIn || false,
                 priviledges: request.session.priviledges || [],
+                canConsultUsers: request.canConsultUsers,
+                canAddUser: request.canAddUser,
+                // canSeeUsers: request.canSeeUsers,
+                canDeleteUser: request.canDeleteUser,
             });
         
         }).catch((error) => {
@@ -104,6 +115,7 @@ exports.getConsultUsers = (request, response, next) => {
             response.redirect('/leads/upload');
         });
 };
+
 
 exports.getLogout = (request, response, next) => {
     request.session.destroy((error) => {
@@ -114,3 +126,40 @@ exports.getLogout = (request, response, next) => {
         response.redirect('/users/login');
     });
 };
+
+exports.getAddUser = (request, response, next) => {
+    response.render('users/addUser.ejs', {
+        isLoggedIn: request.session.isLoggedIn || false,
+        priviledges: request.session.priviledges || [],
+        canUpload: request.canUpload,
+        canConsultReports: request.canConsultReports,
+        canConsultUsers: request.canConsultUsers,
+        canAddUser: request.canAddUser,
+    })
+};
+
+exports.postAddUser = (request, response, next) => {
+    let roleMap = {
+        "admin": 2,  // Asume que "admin" tiene idRole 1
+        "seller": 3  // Asume que "seller" tiene idRole 2
+    };
+
+    const user = new User({
+        nameUser: request.body.nameUser,
+        lastNameUser: request.body.lastNameUser,
+        emailUser: request.body.emailUser,
+        passwordUser: request.body.passwordUser,
+        team: request.session.user.team,  // Obtener el valor "team" del usuario logueado
+        idRole: roleMap[request.body.role]  // Convertir el valor "role" en su respectivo idRole
+    });
+
+    user.save()
+        .then(() => {
+            return response.redirect('/users/addUser');
+        }).catch((error) => {
+            console.log(error);
+            request.session.error = error;
+            response.redirect('/users/addUser');
+        });
+};
+

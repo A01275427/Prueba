@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 03, 2023 at 02:36 AM
+-- Generation Time: Oct 12, 2023 at 08:04 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -82,16 +82,13 @@ CREATE TABLE `priviledges` (
 --
 
 INSERT INTO `priviledges` (`idPriviledge`, `namePriviledge`, `descriptionPriviledge`) VALUES
-(1, 'Registrar Usuario', 'Privilegio en el que se puede registrar un usuario'),
-(2, 'Modificar Usuario', 'Privilegio en el que se puede modificar un usuario'),
-(3, 'Consultar Usuario', 'Privilegio en el que se puede consultar diferentes usuarios'),
-(4, 'Consultar leads', 'Privilegio en el que se puede consultar diferentes leads'),
-(5, 'Modificar leads', 'Privilegio en el que se puede modificar un lead'),
-(6, 'Cargar leads al sistema', 'Privilegio en el que se puede cargar leads al sistema'),
-(7, 'Consultar reportes de leads', 'Privilegio en el que se puede consultar reportes de leads'),
-(8, 'Generar reportes', 'Privilegio en el que se puede generar un reporte'),
-(9, 'Iniciar sesión', 'Privilegio en el que se puede iniciar sesión'),
-(10, 'Cerrar sesión', 'Privilegio en el que se puede cerrar sesión');
+(1, 'canUpload', 'With this privilege, the user can upload a csv.'),
+(2, 'canConsultUsers', 'With this privilege, the user can consult the users registered in the database.'),
+(3, 'canConsultReports', 'With this privilege, the user can consult the users registered in the database.'),
+(4, 'canAddUser', ''),
+(5, 'canDeleteUser', ''),
+(6, 'canDownloadPDF', ''),
+(7, 'canSeeUsers', '');
 
 -- --------------------------------------------------------
 
@@ -149,22 +146,13 @@ INSERT INTO `rolespriviledges` (`idRole`, `idPriviledge`) VALUES
 (1, 5),
 (1, 6),
 (1, 7),
-(1, 8),
-(1, 9),
-(1, 10),
+(2, 1),
 (2, 2),
 (2, 3),
 (2, 4),
-(2, 5),
 (2, 6),
-(2, 7),
-(2, 8),
-(2, 9),
-(2, 10),
-(3, 4),
-(3, 7),
-(3, 9),
-(3, 10);
+(3, 1),
+(3, 3);
 
 -- --------------------------------------------------------
 
@@ -177,16 +165,18 @@ CREATE TABLE `users` (
   `nameUser` varchar(100) NOT NULL,
   `lastNameUser` varchar(100) NOT NULL,
   `emailUser` varchar(80) NOT NULL,
-  `passwordUser` varchar(128) NOT NULL
+  `passwordUser` varchar(128) NOT NULL,
+  `team` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`idUser`, `nameUser`, `lastNameUser`, `emailUser`, `passwordUser`) VALUES
-(30, 'hola', 'Paredes', 'hola@hotmail.com', '$2a$12$0K9ozdzAvhsxz6Po0cGVuOfXvW.4n0mxy4LBUjfz2JS4Ai.AjzPZW'),
-(31, 'hola1', 'Paredes', 'hola1@hotmail.com', '$2a$12$ULEeX/HhfCUAsqsZhg/JMectZ8GCkO.I9ys0sN7ZnKvOkCKN7TMIq');
+INSERT INTO `users` (`idUser`, `nameUser`, `lastNameUser`, `emailUser`, `passwordUser`, `team`) VALUES
+(41, 'prueba', 'prueba', 'prueba@gmail.com', '$2a$12$KMSPkND/LrcJVCX67YKtPuXruCFfxn/LizA633I2qFZDQcwje9BuW', 'prueba@gmail.com'),
+(42, 'prueba2', 'prueba2', 'prueba2@gmail.com', '$2a$12$xQt03fnoqUqW6vIgA/FocOFcbSg79QDLuN3dNvXWaDGLsSlP6xkBu', 'prueba@gmail.com'),
+(43, 'prueba3', 'prueba3', 'prueba3@gmail.com', '$2a$12$XBz6H1Bx1f6lHiOPI3g9quL6uAtjmIXxt6vg8TJf73uO7f.QO7MaK', 'prueba@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -209,6 +199,15 @@ CREATE TABLE `usersroles` (
   `idUser` int(11) NOT NULL,
   `idRole` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `usersroles`
+--
+
+INSERT INTO `usersroles` (`idUser`, `idRole`) VALUES
+(41, 1),
+(42, 2),
+(43, 3);
 
 --
 -- Indexes for dumped tables
@@ -280,13 +279,13 @@ ALTER TABLE `usersroles`
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `idLead` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=379179;
+  MODIFY `idLead` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=392749;
 
 --
 -- AUTO_INCREMENT for table `priviledges`
 --
 ALTER TABLE `priviledges`
-  MODIFY `idPriviledge` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idPriviledge` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `reports`
@@ -304,7 +303,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- Constraints for dumped tables
@@ -321,7 +320,7 @@ ALTER TABLE `leadsreports`
 -- Constraints for table `rolespriviledges`
 --
 ALTER TABLE `rolespriviledges`
-  ADD CONSTRAINT `rolespriviledges_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `roles` (`idRole`),
+  ADD CONSTRAINT `rolespriviledges_ibfk_1` FOREIGN KEY (`idRole`) REFERENCES `roles` (`idRole`) ON DELETE CASCADE,
   ADD CONSTRAINT `rolespriviledges_ibfk_2` FOREIGN KEY (`idPriviledge`) REFERENCES `priviledges` (`idPriviledge`);
 
 --
@@ -335,7 +334,6 @@ ALTER TABLE `usersleads`
 -- Constraints for table `usersroles`
 --
 ALTER TABLE `usersroles`
-  ADD CONSTRAINT `usersroles_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`),
   ADD CONSTRAINT `usersroles_ibfk_2` FOREIGN KEY (`idRole`) REFERENCES `roles` (`idRole`);
 COMMIT;
 

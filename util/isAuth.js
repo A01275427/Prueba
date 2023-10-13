@@ -4,4 +4,4 @@ module.exports = (request, response, next) => {
         return response.redirect('/users/login');
     }
     next();
-}
+};
