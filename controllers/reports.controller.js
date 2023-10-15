@@ -52,39 +52,46 @@ exports.getLeadsData = async (request, response, next) => {
 };
 
 
-
-
-
 exports.downloadReportPDF = async (request, response, next) => {
     try {
         const leads = await ReportsModel.fetchLeads();
-        // Aquí puedes generar tu gráfica usando los datos obtenidos
 
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({ 
+            headless: true, 
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            executablePath: '/ruta/a/chromium-o-chrome'  // Reemplaza esto con la ruta correcta
+        });        
         const page = await browser.newPage();
         
-        // Genera el contenido HTML de la gráfica basado en los datos obtenidos
+        const labels = JSON.stringify(leads.map(lead => lead.value));
+        const data = JSON.stringify(leads.map(lead => lead.gain));
         const htmlContent = `
-        <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Grafica de Linea</h2>
-        <canvas id="lineChart"></canvas>
-        <script>
-            const ctxLine = document.getElementById('lineChart').getContext('2d');
-            const myLineChart = new Chart(ctxLine, {
-                type: 'line',
-                data: {
-                    labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
-                    datasets: [{
-                        label: 'Leads',
-                        data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
-                    }]
-                },
-            });
-        </script>
-    </div>
+        <html>
+            <head>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            </head>
+            <body>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Grafica de Linea</h2>
+                    <canvas id="lineChart"></canvas>
+                    <script>
+                        const ctxLine = document.getElementById('lineChart').getContext('2d');
+                        const myLineChart = new Chart(ctxLine, {
+                            type: 'line',
+                            data: {
+                                labels: ${labels},
+                                datasets: [{
+                                    label: 'Leads',
+                                    data: ${data},
+                                }]
+                            },
+                        });
+                    </script>
+                </div>
+            </body>
+        </html>
         `;
 
-        // Renderiza la gráfica en la página
         await page.setContent(htmlContent);
         const pdf = await page.pdf({ format: 'A4' });
 
@@ -93,10 +100,13 @@ exports.downloadReportPDF = async (request, response, next) => {
 
         await browser.close();
     } catch (error) {
-        console.error(error);
+        console.error("Error detallado:", error);
         response.status(500).json({ message: 'Error al generar el PDF' });
     }
 };
+
+
+
 
 
 

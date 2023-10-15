@@ -1,6 +1,7 @@
 const db = require('../util/database');
 const mysql = require('mysql2');
 
+
 module.exports = class ReportsModel{
 
     constructor(leads){
