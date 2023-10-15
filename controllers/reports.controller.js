@@ -51,6 +51,10 @@ exports.getLeadsData = async (request, response, next) => {
     }
 };
 
+
+
+
+/*
 exports.downloadReportPDF = async (request, response, next) => {
     try {
         const leads = await ReportsModel.fetchLeads();
@@ -59,7 +63,7 @@ exports.downloadReportPDF = async (request, response, next) => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         // Renderiza la gráfica en la página
-        await page.setContent(/* tu gráfica en formato HTML */);
+        await page.setContent(/* tu gráfica en formato HTML );
         const pdf = await page.pdf({ format: 'A4' });
 
         response.contentType('application/pdf');
@@ -71,6 +75,7 @@ exports.downloadReportPDF = async (request, response, next) => {
         response.status(500).json({ message: 'Error al generar el PDF' });
     }
 };
+*/
 
 /*
 // Agregar un nuevo reporte
