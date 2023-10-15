@@ -1,0 +1,24 @@
+@startuml
+actor Usuario
+
+activate Usuario
+Usuario -> Sistema: Click en el botón de generar PDF
+activate Sistema
+
+Sistema -> Sistema: Conectar con la base de datos
+alt Conexión exitosa
+    Sistema --> Sistema: Extraer datos de leads
+    Sistema --> Sistema: Generar gráficas
+    Sistema --> Sistema: Convertir gráficas a imágenes
+    Sistema --> Sistema: Generar PDF con imágenes
+    Sistema --> Sistema: Enviar PDF al navegador del usuario
+    Sistema --> Usuario: Mostrar mensaje de éxito
+else Conexión fallida
+    Sistema --> Usuario: Mostrar mensaje de error: "Hubo un error al conectarse con la base de datos"
+end
+
+deactivate Sistema
+Usuario -> Usuario: Guardar archivo PDF
+deactivate Usuario
+
+@enduml

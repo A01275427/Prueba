@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 12, 2023 at 08:04 PM
+-- Generation Time: Oct 14, 2023 at 03:59 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -50,7 +50,8 @@ CREATE TABLE `leads` (
   `pipe` varchar(255) DEFAULT NULL,
   `stage` varchar(255) DEFAULT NULL,
   `archived` varchar(10) DEFAULT NULL,
-  `manuallyCreated` varchar(10) DEFAULT NULL
+  `manuallyCreated` varchar(10) DEFAULT NULL,
+  `leadTeam` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -176,7 +177,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`idUser`, `nameUser`, `lastNameUser`, `emailUser`, `passwordUser`, `team`) VALUES
 (41, 'prueba', 'prueba', 'prueba@gmail.com', '$2a$12$KMSPkND/LrcJVCX67YKtPuXruCFfxn/LizA633I2qFZDQcwje9BuW', 'prueba@gmail.com'),
 (42, 'prueba2', 'prueba2', 'prueba2@gmail.com', '$2a$12$xQt03fnoqUqW6vIgA/FocOFcbSg79QDLuN3dNvXWaDGLsSlP6xkBu', 'prueba@gmail.com'),
-(43, 'prueba3', 'prueba3', 'prueba3@gmail.com', '$2a$12$XBz6H1Bx1f6lHiOPI3g9quL6uAtjmIXxt6vg8TJf73uO7f.QO7MaK', 'prueba@gmail.com');
+(43, 'prueba3', 'prueba3', 'prueba3@gmail.com', '$2a$12$XBz6H1Bx1f6lHiOPI3g9quL6uAtjmIXxt6vg8TJf73uO7f.QO7MaK', 'prueba@gmail.com'),
+(44, 'ivan123', 'ivan', 'ivan@tec.mx', '$2a$12$VJe4Ko6VxKdziiL575aJruqPpRKCo8YKLr0CZpPziUxydAGFuymJ6', 'prueba@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -207,7 +209,8 @@ CREATE TABLE `usersroles` (
 INSERT INTO `usersroles` (`idUser`, `idRole`) VALUES
 (41, 1),
 (42, 2),
-(43, 3);
+(43, 3),
+(44, 3);
 
 --
 -- Indexes for dumped tables
@@ -279,7 +282,7 @@ ALTER TABLE `usersroles`
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `idLead` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=392749;
+  MODIFY `idLead` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=393343;
 
 --
 -- AUTO_INCREMENT for table `priviledges`
@@ -303,7 +306,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- Constraints for dumped tables

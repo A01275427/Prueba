@@ -66,6 +66,8 @@ exports.postUpload = (request, response, next) => {
                 .toString()
                 .slice(3, 6)}-${phone.toString().slice(6, 9)}-${phone.toString().slice(9, 21)}`;
 
+            const userTeam = request.session.user.team;
+
             const lead = new Lead({
                 phone: parsedPhone || " ",
                 name: row['Nombre'] || " ",
@@ -89,6 +91,7 @@ exports.postUpload = (request, response, next) => {
                 stage: row['Etapa'] || " ",
                 archived: row['Archivado'] || " ",
                 manuallyCreated: row['Creado Manualmente'] || " ",
+                leadTeam: userTeam,
             });
             await lead.insertLead();
         }

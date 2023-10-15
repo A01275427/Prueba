@@ -25,13 +25,14 @@ module.exports = class lead {
         this.stage = newLead.stage || " ";
         this.archived = newLead.archived || " ";
         this.manuallyCreated = newLead.manuallyCreated || " ";
+        this.leadTeam = newLead.leadTeam || null;
     }
 
     async insertLead() { 
         try {
             return await db.execute (
-                'INSERT INTO leads (phone, name, value, gain, email, tags, company, createdAt, creationTime, firstMessageDate, firstMessageTime, firstMessage, lastMessageDate, lastMessageTime, lastMessage, status, leadStatus, assignedTo, pipe, stage, archived, manuallyCreated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [this.phone, this.name, this.value, this.gain, this.email, this.tags, this.company, this.createdAt, this.creationTime, this.firstMessageDate, this.firstMessageTime, this.firstMessage, this.lastMessageDate, this.lastMessageTime, this.lastMessage, this.status, this.leadStatus, this.assignedTo, this.pipe, this.stage, this.archived, this.manuallyCreated]
+                'INSERT INTO leads (phone, name, value, gain, email, tags, company, createdAt, creationTime, firstMessageDate, firstMessageTime, firstMessage, lastMessageDate, lastMessageTime, lastMessage, status, leadStatus, assignedTo, pipe, stage, archived, manuallyCreated, leadTeam) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [this.phone, this.name, this.value, this.gain, this.email, this.tags, this.company, this.createdAt, this.creationTime, this.firstMessageDate, this.firstMessageTime, this.firstMessage, this.lastMessageDate, this.lastMessageTime, this.lastMessage, this.status, this.leadStatus, this.assignedTo, this.pipe, this.stage, this.archived, this.manuallyCreated, this.leadTeam]
             );
             } catch (error){
                 console.log(error);

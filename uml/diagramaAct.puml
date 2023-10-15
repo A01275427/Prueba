@@ -1,0 +1,23 @@
+@startuml
+|Usuario|
+:Click en el boton de generar pdf;
+|Sistema|
+:Conectar con la base de datos;
+if (Error en la conexión) then (si)
+  |Sistema|
+  :Mostrar mensaje de error: "Hubo un error al conectarse con la base de datos";
+else (no)
+  |Sistema|
+  :Extraer los datos de leads de la base de datos;
+  |Sistema|
+  :Generar las graficas;
+  |Sistema|
+  :Convertir las graficas a imagen;
+  |Sistema|
+  :Generar el pdf con las imágenes de graficas;
+  |Sistema|
+  :Enviar el pdf al navegador del usuario;
+endif
+|Usuario|
+:Guardar archivo PDF;
+@enduml

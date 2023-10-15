@@ -41,6 +41,12 @@ app.use((request, response, next) => {
     console.log(request.body);
     response.locals.csrfToken = request.csrfToken();
     console.log(response.locals);
+
+    const cookies =  request.get('Cookie');
+    console.log(cookies);
+    console.log(cookies.split('='[1]));
+    response.setHeader('setCookie', 'ultimoAcceso' + new Date() + ';HttpOnly');
+
     next();
 });
 
@@ -85,5 +91,6 @@ app.use((request, response, next) => {
 `;
     response.send(html);
 });
+
 
 app.listen(3000);

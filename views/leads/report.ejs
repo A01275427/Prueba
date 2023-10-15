@@ -1,3 +1,6 @@
+<% if (typeof canConsultUsers === 'undefined') { canConsultUsers = false; } %>
+<% if (typeof canDownloadPDF === 'undefined') { canDownloadPDF = false; } %>
+
 <%- include('../includes/head.ejs') %>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,7 +26,7 @@
                         data: {
                             labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
                             datasets: [{
-                                label: 'Leads',
+                                label: '',
                                 data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)', 
                                 borderColor: 'rgba(75, 192, 192, 1)',       
@@ -33,7 +36,17 @@
                         options: {
                             scales: {
                                 y: {
-                                    beginAtZero: true
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Gain'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Value'
+                                    }
                                 }
                             }
                         }
