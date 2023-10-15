@@ -106,10 +106,6 @@ exports.downloadReportPDF = async (request, response, next) => {
 };
 
 
-
-
-
-
 /*
 // Agregar un nuevo reporte
 exports.addReport = async (reportData) => {
