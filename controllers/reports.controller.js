@@ -54,7 +54,7 @@ exports.getLeadsData = async (request, response, next) => {
 
 
 
-/*
+
 exports.downloadReportPDF = async (request, response, next) => {
     try {
         const leads = await ReportsModel.fetchLeads();
@@ -62,8 +62,30 @@ exports.downloadReportPDF = async (request, response, next) => {
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
+        
+        // Genera el contenido HTML de la gráfica basado en los datos obtenidos
+        const htmlContent = `
+        <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Grafica de Linea</h2>
+        <canvas id="lineChart"></canvas>
+        <script>
+            const ctxLine = document.getElementById('lineChart').getContext('2d');
+            const myLineChart = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
+                    datasets: [{
+                        label: 'Leads',
+                        data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
+                    }]
+                },
+            });
+        </script>
+    </div>
+        `;
+
         // Renderiza la gráfica en la página
-        await page.setContent(/* tu gráfica en formato HTML );
+        await page.setContent(htmlContent);
         const pdf = await page.pdf({ format: 'A4' });
 
         response.contentType('application/pdf');
@@ -75,7 +97,8 @@ exports.downloadReportPDF = async (request, response, next) => {
         response.status(500).json({ message: 'Error al generar el PDF' });
     }
 };
-*/
+
+
 
 /*
 // Agregar un nuevo reporte

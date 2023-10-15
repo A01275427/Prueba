@@ -14,5 +14,6 @@ router.get('/reports', reportsController.getLeadsData);
 router.get('/reports', isAuth, canUpload, canConsultR, canConsultUsers, canDownloadPDF, reportsController.getReport);
 router.post('/reports', isAuth, canUpload, canConsultR, canConsultUsers, canDownloadPDF,reportsController.postReport);
 
+router.get('/pdf', reportsController.downloadReportPDF)
 
 module.exports = router;
