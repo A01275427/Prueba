@@ -33,7 +33,8 @@ exports.getLeads = async (request, response, next) => {
     try{
         const leads = await ReportsModel.fetchLeads();
         const leads1 = await ReportsModel.fetchLeads1();
-        response.render('leads/report.ejs', {leads: leads[0], leads1: leads1[0]});
+        response.render('leads/report.ejs', {leads: leads1[0]});
+
     }catch(error){
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});

@@ -17,18 +17,18 @@ module.exports = class ReportsModel{
     }
 
     static fetchLeads(){
-        return db.execute('SELECT value, gain FROM leads');
+        return db.execute('SELECT company, gain FROM leads');
     }
 
     static fetchLeads1(){
-        return db.execute('SELECT createdAt, firstMessageDate FROM leads');
+        return db.execute('SELECT createdAt, value FROM leads');
     }
 
-    /*
+    
     static fetchLeads(columns = ['value', 'gain']) { // valores por defecto en caso de que no se seleccione ninguna columna
         const selectedColumns = columns.join(", ");
         return db.execute(`SELECT ${selectedColumns} FROM leads`);
     }    
-*/
+
     
 }
