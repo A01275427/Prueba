@@ -23,12 +23,21 @@ exports.postReport = async (request, response, next) => {
     try {
         const selectedColumns = request.body.columns || [];
         const leads = await ReportsModel.fetchLeads(selectedColumns);
-        response.render('leads/report.ejs', {leads: leads[0]});
+        response.render('leads/report.ejs', {
+            leads: leads[0],
+            selectedColumns: selectedColumns, // Añade esta línea
+            columns: await ReportsModel.fetchColumns(), // Añade esta línea si deseas seguir mostrando las opciones de columnas en el formulario
+            canUpload: request.canUpload,
+            canConsultUsers: request.canConsultUsers,
+            canConsultReports: request.canConsultReports,
+            canDownloadPDF: request.canDownloadPDF
+        });
     } catch (error) {
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
+
 
 exports.getLeads = async (request, response, next) => {
     try {
