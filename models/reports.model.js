@@ -15,9 +15,15 @@ module.exports = class ReportsModel{
     static fetchAll(){
         return db.execute('SELECT * FROM reports');
     }
-
+/*
     static fetchLeads(){
         return db.execute('SELECT value, gain FROM leads');
     }
+*/
+    static fetchLeads(columns = ['value', 'gain']) { // valores por defecto en caso de que no se seleccione ninguna columna
+        const selectedColumns = columns.join(", ");
+        return db.execute(`SELECT ${selectedColumns} FROM leads`);
+    }    
 
+    
 }

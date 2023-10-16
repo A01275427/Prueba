@@ -51,6 +51,18 @@ exports.getLeadsData = async (request, response, next) => {
     }
 };
 
+exports.postReport = async (request, response, next) => {
+    try {
+        const selectedColumns = request.body.columns || [];
+        const leads = await ReportsModel.fetchLeads(selectedColumns);
+        response.render('leads/report.ejs', {leads: leads[0]});
+    } catch (error) {
+        console.error(error);
+        response.status(404).json({message: 'Error al obtener los leads'});
+    }
+};
+
+
 
 exports.downloadReportPDF = async (request, response, next) => {
     try {
