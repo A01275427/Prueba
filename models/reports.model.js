@@ -25,5 +25,18 @@ module.exports = class ReportsModel{
         return db.execute(`SELECT ${selectedColumns} FROM leads`);
     }    
 
+    static fetchColumns() {
+        return db.execute('SHOW COLUMNS FROM leads');
+    }
     
 }
+
+exports.fetchColumns = async () => {
+    try {
+        const [rows, fields] = await db.execute('SHOW COLUMNS FROM leads');
+        return rows;
+    } catch (error) {
+        console.error(error);
+    }
+};
+

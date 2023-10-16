@@ -3,6 +3,12 @@
 
 <%- include('../includes/head.ejs') %>
 
+<style>
+.grafica {
+    display: none;
+}
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <main>
@@ -14,87 +20,23 @@
 
         <!-- Formulario para seleccionar columnas -->
         <div class="mb-4">
-            <form action="/reports" method="post">
-                <label class="mr-4">
-                    <input type="checkbox" name="columns" value="value"> Value
-                </label>
-                <label class="mr-4">
-                    <input type="checkbox" name="columns" value="gain"> Gain
-                </label>
-                <!-- Agrega más columnas según lo necesites -->
+            <form action="/reports" method="post" id="tuFormularioId">
+                <% columns.forEach(column => { %>
+                    <label class="mr-4">
+                        <input type="checkbox" name="columns" value="<%= column.Field %>"> <%= column.Field %>
+                    </label>
+                <% }); %>
+                <!-- Campo oculto para el token CSRF -->
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <input type="submit" value="Generar Gráfica" class="bg-blue-500 text-white rounded-md px-2 py-1">
             </form>
         </div>
 
         <br>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Gráfica de Barras</h2>
-                <canvas id="barChart"></canvas>
-                <script>
-                    const ctxBar = document.getElementById('barChart').getContext('2d');
-                    const myBarChart = new Chart(ctxBar, {
-                        type: 'bar',
-                        data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
-                            datasets: [{
-                                label: '',
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)', 
-                                borderColor: 'rgba(75, 192, 192, 1)',       
-                                borderWidth: 1                              
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Gain'
-                                    }
-                                },
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Value'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Gráfica de Pastel</h2>
-                <canvas id="pieChart"></canvas>
-                <!-- Gráfica de pastel -->
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Gráfica de Barras Horizontal</h2>
-                <canvas id="horizontalBarChart"></canvas>
-                <!-- Gráfica de barras horizontal -->
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Grafica de Linea</h2>
-                <canvas id="lineChart"></canvas>
-                <script>
-                    const ctxLine = document.getElementById('lineChart').getContext('2d');
-                    const myLineChart = new Chart(ctxLine, {
-                        type: 'line',
-                        data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
-                            datasets: [{
-                                label: 'Leads',
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
-                            }]
-                        },
-                    });
-                </script>
+        <div class="grafica">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- ... (resto del código de las gráficas) ... -->
             </div>
         </div>
     </div>
@@ -103,9 +45,15 @@
 <button class="bg-blue-500 text-white rounded-md px-2 py-1" id="pdf" onclick="downloadPDF()">Generar PDF</button>
 
 <script>
-    function downloadPDF() {
-        window.location.href = '/leads/pdf';
-    }
+function downloadPDF() {
+    window.location.href = '/leads/pdf';
+}
+
+document.getElementById('tuFormularioId').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe de inmediato
+    document.querySelector('.grafica').style.display = 'block';
+    this.submit(); // Envía el formulario después de mostrar las gráficas
+});
 </script>
 
 <%- include('../includes/foot.ejs') %>

@@ -2,13 +2,13 @@ const ReportsModel = require('../models/reports.model');
 const bcrypt = require('bcryptjs');
 const puppeteer = require('puppeteer');
 
-
-
 exports.getReport = async (request, response, next) => {
     try {
         const reports = await ReportsModel.fetchAll();
+        const columns = await ReportsModel.fetchColumns();
         response.render('leads/report.ejs', { 
             reports: reports,
+            columns: columns,
             canUpload: request.canUpload,
             canConsultUsers: request.canConsultUsers,
             canConsultReports: request.canConsultReports,
@@ -16,38 +16,6 @@ exports.getReport = async (request, response, next) => {
         });
     } catch (error) {
         console.error(error);
-    }
-};
-
-exports.postReport = async (request, response, next) => {
-    try {
-        const reportData = {
-        };
-        await ReportsModel.addReport(reportData);
-        response.redirect('/reports');
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-
-exports.getLeads = async (request, response, next) => {
-    try{
-        const leads = await ReportsModel.fetchLeads();
-        response.render('leads/report.ejs', {leads: leads[0]});
-    }catch(error){
-        console.error(error);
-        response.status(404).json({message: 'Error al obtener los leads'});
-    }
-};
-
-exports.getLeadsData = async (request, response, next) => {
-    try{
-        const leadsData = await ReportsModel.fetchLeads();
-        response.json(leadsData);
-    }catch(error){
-        console.error(error);
-        response.status(500).json({message: 'Error al obtener los leads'});
     }
 };
 
@@ -62,7 +30,29 @@ exports.postReport = async (request, response, next) => {
     }
 };
 
+exports.getLeads = async (request, response, next) => {
+    try {
+        const leads = await ReportsModel.fetchLeads();
+        const columns = await ReportsModel.fetchColumns();
+        response.render('leads/report.ejs', {
+            leads: leads[0],
+            columns: columns,
+        });
+    } catch (error) {
+        console.error(error);
+        response.status(404).json({ message: 'Error al obtener los leads' });
+    }
+};
 
+exports.getLeadsData = async (request, response, next) => {
+    try {
+        const leadsData = await ReportsModel.fetchLeads();
+        response.json(leadsData);
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({message: 'Error al obtener los leads'});
+    }
+};
 
 exports.downloadReportPDF = async (request, response, next) => {
     try {
