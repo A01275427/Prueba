@@ -16,4 +16,7 @@ router.post('/reports', isAuth, canUpload, canConsultR, canConsultUsers, canDown
 
 router.get('/pdf', reportsController.downloadReportPDF)
 
+router.delete('/delete-csv', reportsController.deleteCSV);
+
+
 module.exports = router;

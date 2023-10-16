@@ -20,5 +20,11 @@ module.exports = class ReportsModel{
         return db.execute('SELECT value, gain FROM leads');
     }
 
+    static deleteCSVData() {
+        // Suponiendo que los datos del CSV se almacenan en una tabla llamada 'csv_data'
+        return db.execute('DELETE FROM leads');
+    }
+    
+
 
 }
