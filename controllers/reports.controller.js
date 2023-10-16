@@ -2,7 +2,6 @@ const ReportsModel = require('../models/reports.model');
 const bcrypt = require('bcryptjs');
 const puppeteer = require('puppeteer');
 
-
 exports.getReport = async (request, response, next) => {
     try {
         const reports = await ReportsModel.fetchAll();
@@ -33,12 +32,14 @@ exports.postReport = async (request, response, next) => {
 exports.getLeads = async (request, response, next) => {
     try{
         const leads = await ReportsModel.fetchLeads();
-        response.render('leads/report.ejs', {leads: leads[0]});
+        const leads1 = await ReportsModel.fetchLeads1();
+        response.render('leads/report.ejs', {leads: leads[0], leads1: leads1[0]});
     }catch(error){
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
+
 
 exports.getLeadsData = async (request, response, next) => {
     try{
@@ -49,6 +50,17 @@ exports.getLeadsData = async (request, response, next) => {
         response.status(500).json({message: 'Error al obtener los leads'});
     }
 };
+
+exports.getLeads1 = async (request, response, next) => {
+    try{
+        const leadsData = await ReportsModel.fetchLeads1();
+        response.json(leadsData);
+    }catch(error){
+        console.error(error);
+        response.status(500).json({message: 'Error al obtener los leads'});
+    }
+};
+
 
 
 

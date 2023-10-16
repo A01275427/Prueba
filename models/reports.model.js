@@ -21,10 +21,10 @@ module.exports = class ReportsModel{
     }
 
     static fetchLeads1(){
-        return db.execute('SELECT value, gain FROM leads');
+        return db.execute('SELECT createdAt, firstMessageDate FROM leads');
     }
 
-/*
+    /*
     static fetchLeads(columns = ['value', 'gain']) { // valores por defecto en caso de que no se seleccione ninguna columna
         const selectedColumns = columns.join(", ");
         return db.execute(`SELECT ${selectedColumns} FROM leads`);

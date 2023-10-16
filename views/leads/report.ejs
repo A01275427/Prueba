@@ -87,10 +87,10 @@
                     const myLineChart = new Chart(ctxLine, {
                         type: 'line',
                         data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
+                            labels: <%- JSON.stringify(leads.map(lead => lead.createdAt)) %>,
                             datasets: [{
                                 label: 'Leads',
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
+                                data: <%- JSON.stringify(leads.map(lead => lead.firstMessageDate)) %>,
                             }]
                         },
                     });
@@ -99,7 +99,7 @@
         </div>
     </div>
 
-</main>
+</main> 
 <button class="bg-blue-500 text-white rounded-md px-2 py-1" id="pdf" onclick="downloadPDF()">Generar PDF</button>
 
 <script>
