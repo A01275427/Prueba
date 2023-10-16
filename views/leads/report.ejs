@@ -86,26 +86,6 @@
 </main>
 <button class="bg-blue-500 text-white rounded-md px-2 py-1" id="pdf" onclick="downloadPDF()">Generar PDF</button>
 
-<button onclick="deleteCSV()">Eliminar CSV</button>
-
-<script>
-    function deleteCSV() {
-        fetch('/reports/delete-csv', {
-            method: 'DELETE',
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Datos del CSV eliminados con éxito!');
-            } else {
-                alert('Error al eliminar los datos del CSV.');
-            }
-        });
-    }
-</script>
-
-
-
 <script>
     function downloadPDF() {
         window.location.href = '/leads/pdf';

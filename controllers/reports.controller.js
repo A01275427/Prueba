@@ -105,20 +105,6 @@ exports.downloadReportPDF = async (request, response, next) => {
     }
 };
 
-exports.deleteCSV = async (req, res, next) => {
-    try {
-        // Suponiendo que tienes un método en tu modelo llamado 'deleteCSVData'
-        await ReportsModel.deleteCSVData();
-
-        res.json({ success: true, message: 'Datos del CSV eliminados con éxito!' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Error al eliminar los datos del CSV.' });
-    }
-};
-
-
-
 // Agregar un nuevo reporte
 exports.addReport = async (reportData) => {
     try {
