@@ -2,13 +2,13 @@ const ReportsModel = require('../models/reports.model');
 const bcrypt = require('bcryptjs');
 const puppeteer = require('puppeteer');
 
+
+
 exports.getReport = async (request, response, next) => {
     try {
         const reports = await ReportsModel.fetchAll();
-        const columns = await ReportsModel.fetchColumns();
         response.render('leads/report.ejs', { 
             reports: reports,
-            columns: columns,
             canUpload: request.canUpload,
             canConsultUsers: request.canConsultUsers,
             canConsultReports: request.canConsultReports,
@@ -21,43 +21,31 @@ exports.getReport = async (request, response, next) => {
 
 exports.postReport = async (request, response, next) => {
     try {
-        const selectedColumns = request.body.columns || [];
-        const leads = await ReportsModel.fetchLeads(selectedColumns);
-        response.render('leads/report.ejs', {
-            leads: leads[0],
-            selectedColumns: selectedColumns, // Añade esta línea
-            columns: await ReportsModel.fetchColumns(), // Añade esta línea si deseas seguir mostrando las opciones de columnas en el formulario
-            canUpload: request.canUpload,
-            canConsultUsers: request.canConsultUsers,
-            canConsultReports: request.canConsultReports,
-            canDownloadPDF: request.canDownloadPDF
-        });
+        const reportData = {
+        };
+        await ReportsModel.addReport(reportData);
+        response.redirect('/reports');
     } catch (error) {
         console.error(error);
-        response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
 
 
 exports.getLeads = async (request, response, next) => {
-    try {
+    try{
         const leads = await ReportsModel.fetchLeads();
-        const columns = await ReportsModel.fetchColumns();
-        response.render('leads/report.ejs', {
-            leads: leads[0],
-            columns: columns,
-        });
-    } catch (error) {
+        response.render('leads/report.ejs', {leads: leads[0]});
+    }catch(error){
         console.error(error);
-        response.status(404).json({ message: 'Error al obtener los leads' });
+        response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
 
 exports.getLeadsData = async (request, response, next) => {
-    try {
+    try{
         const leadsData = await ReportsModel.fetchLeads();
         response.json(leadsData);
-    } catch (error) {
+    }catch(error){
         console.error(error);
         response.status(500).json({message: 'Error al obtener los leads'});
     }
@@ -66,44 +54,12 @@ exports.getLeadsData = async (request, response, next) => {
 exports.downloadReportPDF = async (request, response, next) => {
     try {
         const leads = await ReportsModel.fetchLeads();
+        // Aquí puedes generar tu gráfica usando los datos obtenidos
 
-        const browser = await puppeteer.launch({ 
-            headless: true, 
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            executablePath: '/ruta/a/chromium-o-chrome'  // Reemplaza esto con la ruta correcta
-        });        
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        
-        const labels = JSON.stringify(leads.map(lead => lead.value));
-        const data = JSON.stringify(leads.map(lead => lead.gain));
-        const htmlContent = `
-        <html>
-            <head>
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            </head>
-            <body>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold mb-4">Grafica de Linea</h2>
-                    <canvas id="lineChart"></canvas>
-                    <script>
-                        const ctxLine = document.getElementById('lineChart').getContext('2d');
-                        const myLineChart = new Chart(ctxLine, {
-                            type: 'line',
-                            data: {
-                                labels: ${labels},
-                                datasets: [{
-                                    label: 'Leads',
-                                    data: ${data},
-                                }]
-                            },
-                        });
-                    </script>
-                </div>
-            </body>
-        </html>
-        `;
-
-        await page.setContent(htmlContent);
+        // Renderiza la gráfica en la página
+        await page.setContent(/* tu gráfica en formato HTML */);
         const pdf = await page.pdf({ format: 'A4' });
 
         response.contentType('application/pdf');
@@ -111,11 +67,12 @@ exports.downloadReportPDF = async (request, response, next) => {
 
         await browser.close();
     } catch (error) {
-        console.error("Error detallado:", error);
+        console.error(error);
         response.status(500).json({ message: 'Error al generar el PDF' });
     }
 };
 
+/*
 // Agregar un nuevo reporte
 exports.addReport = async (reportData) => {
     try {
@@ -136,3 +93,4 @@ exports.fetchAll = async () => {
         console.error(error);
     }
 };
+*/
