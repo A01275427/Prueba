@@ -10,6 +10,11 @@ exports.getReport = async (request, response, next) => {
         const leads = await ReportsModel.fetchLeads();
         const leadColumns = await ReportsModel.getLeadColumns(); // Asegúrate de que esta línea esté aquí
 
+        if (!leads || !leads[0]) {
+            console.error("Leads data is missing or incorrect");
+            return response.status(500).send("Internal Server Error");
+        }        
+
         response.render('leads/report.ejs', { 
             reports: reports,
             leads: leads[0],
@@ -56,7 +61,7 @@ exports.getLeads = async (request, response, next) => {
     try {
         const leads = await ReportsModel.fetchLeads();
         const leadColumns = await ReportsModel.fetchLeadColumns();
-        response.render('leads/report', { someData: leads, leadColumns: leadColumns });
+        response.render('leads/report', { leads: leads, leadColumns: leadColumns });
     } catch(error) {
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
