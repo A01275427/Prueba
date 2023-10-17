@@ -4,16 +4,59 @@
 <%- include('../includes/head.ejs') %>
 
 <style>
-    form {
-        width: 80%;
-        font-size: 30px;
+    main {
+        font-family: 'Arial', sans-serif;
+        padding: 20px;
     }
-    form label, form select, form input {
+
+    h1, h2 {
+        color: #333;
+    }
+
+    h1 {
+        font-size: 2.5em;
         margin-bottom: 20px;
     }
-    form select, form input[type="submit"] {
-        height: 40px;
-        padding: 5px 10px;
+
+    h2 {
+        font-size: 2em;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    form {
+        margin-bottom: 30px;
+    }
+
+    label, select, input[type="submit"] {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    select, input[type="submit"] {
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    input[type="submit"] {
+        background-color: #007BFF;
+        color: #FFF;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
     }
 </style>
 
@@ -29,32 +72,69 @@
         <% } %>
         <br>
         
-        <!-- Formulario para seleccionar datos de la tabla leads -->
-        <form action="/ruta-de-procesamiento" method="POST">
+        <!-- Formulario para seleccionar datos de la tabla leads y los ejes X y Y -->
+        <form action="/ruta-de-procesamiento" method="POST" id="graphForm">
             <label for="leadSelection">Selecciona un lead:</label>
             <select name="leadSelection" id="leadSelection">
                 <% leads.forEach(lead => { %>
                     <option value="<%= lead.id %>"><%= lead.company %></option>
                 <% }); %>
             </select>
+
+            <label for="xAxisSelection">Selecciona una columna para el eje X:</label>
+            <select name="xAxisSelection" id="xAxisSelection">
+                <% leadColumns.forEach(column => { %>
+                    <option value="<%= column %>"><%= column %></option>
+                <% }); %>
+            </select>
+
+            <label for="yAxisSelection">Selecciona una columna para el eje Y:</label>
+            <select name="yAxisSelection" id="yAxisSelection">
+                <% leadColumns.forEach(column => { %>
+                    <option value="<%= column %>"><%= column %></option>
+                <% }); %>
+            </select>
+
             <input type="submit" value="Mostrar Gráfica">
         </form>
 
-        <% if (typeof leadColumns !== 'undefined' && leadColumns.length > 0) { %>
-            <!-- Formulario para seleccionar una columna de la tabla leads -->
-            <form action="/ruta-de-procesamiento-columna" method="POST">
-                <label for="leadColumnSelection">Selecciona una columna:</label>
-                <select name="leadColumnSelection" id="leadColumnSelection">
-                    <% leadColumns.forEach(column => { %>
-                        <option value="<%= column %>"><%= column %></option>
-                    <% }); %>
-                </select>
-                <input type="submit" value="Mostrar Gráfica">
-            </form>
-        <% } else { %>
-            <p>No hay columnas disponibles para seleccionar.</p>
-        <% } %>
-        
+        <!-- Sección oculta de gráficas que se mostrará al presionar el botón -->
+        <div id="graphsSection" style="display: none;">
+            <!-- Gráficas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Gráfica de Barras -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Gráfica de Barras</h2>
+                    <canvas id="barChart"></canvas>
+                </div>
+
+                <!-- Gráfica de Pastel -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Gráfica de Pastel</h2>
+                    <canvas id="pieChart"></canvas>
+                </div>
+
+                <!-- Gráfica de Barras Horizontales -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Gráfica de Barras Horizontal</h2>
+                    <canvas id="horizontalBarChart"></canvas>
+                </div>
+
+                <!-- Gráfica de Línea -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Gráfica de Línea</h2>
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('graphForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Aquí iría el código para generar las gráficas basadas en las selecciones de los formularios
+                document.getElementById('graphsSection').style.display = 'block';
+            });
+        </script>
 
         <!-- Historial de archivos CSV cargados -->
         <h2>Historial de archivos CSV cargados</h2>
@@ -72,156 +152,6 @@
         <% } else { %>
             <p>No hay reportes disponibles.</p>
         <% } %>
-
-        <!-- Gráficas -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Gráfica de Barras -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Gráfica de Barras</h2>
-                <canvas id="barChart"></canvas>
-                <script>
-                    const ctxBar = document.getElementById('barChart').getContext('2d');
-                    const myBarChart = new Chart(ctxBar, {
-                        type: 'bar',
-                        data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
-                            datasets: [{
-                                label: '',
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)', 
-                                borderColor: 'rgba(75, 192, 192, 1)',       
-                                borderWidth: 1                              
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Gain'
-                                    }
-                                },
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Value'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-
-            <!-- Gráfica de Pastel -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Gráfica de Pastel</h2>
-                <canvas id="pieChart"></canvas>
-                <script>
-                    const ctxPie = document.getElementById('pieChart').getContext('2d');
-                    const myPieChart = new Chart(ctxPie, {
-                        type: 'pie',
-                        data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
-                            datasets: [{
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(54, 162, 235, 0.2)',
-                                    'rgba(255, 206, 86, 0.2)',
-                                    // ... puedes agregar más colores aquí
-                                ],
-                                borderColor: [
-                                    'rgba(255, 99, 132, 1)',
-                                    'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 1)',
-                                    // ... puedes agregar más colores aquí
-                                ],
-                                borderWidth: 1
-                            }]
-                        }
-                    });
-                </script>
-            </div>
-
-            <!-- Gráfica de Barras Horizontales -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Gráfica de Barras Horizontal</h2>
-                <canvas id="horizontalBarChart"></canvas>
-                <script>
-                    const ctxHorizontalBar = document.getElementById('horizontalBarChart').getContext('2d');
-                    const myHorizontalBarChart = new Chart(ctxHorizontalBar, {
-                        type: 'horizontalBar',
-                        data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
-                            datasets: [{
-                                label: '',
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
-                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                borderColor: 'rgba(153, 102, 255, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                x: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Gain'
-                                    }
-                                },
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Value'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-
-            <!-- Gráfica de Línea -->
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold mb-4">Gráfica de Línea</h2>
-                <canvas id="lineChart"></canvas>
-                <script>
-                    const ctxLine = document.getElementById('lineChart').getContext('2d');
-                    const myLineChart = new Chart(ctxLine, {
-                        type: 'line',
-                        data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
-                            datasets: [{
-                                label: 'Leads',
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
-                                borderColor: 'rgba(255, 159, 64, 1)',
-                                fill: false
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Gain'
-                                    }
-                                },
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Value'
-                                    }
-                                }
-                            }
-                        }
-                    });
-                </script>
-            </div>
-        </div>
     </div>
 </main>
 
