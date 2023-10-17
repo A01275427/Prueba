@@ -74,12 +74,17 @@
         
         <!-- Formulario para seleccionar datos de la tabla leads y los ejes X y Y -->
         <form action="/ruta-de-procesamiento" method="POST" id="graphForm">
-            <label for="leadSelection">Selecciona un lead:</label>
+
+            <!--
+
+                <label for="leadSelection">Selecciona un lead:</label>
             <select name="leadSelection" id="leadSelection">
                 <% leads.forEach(lead => { %>
                     <option value="<%= lead.id %>"><%= lead.company %></option>
                 <% }); %>
             </select>
+
+            -->
 
             <label for="xAxisSelection">Selecciona una columna para el eje X:</label>
             <select name="xAxisSelection" id="xAxisSelection">
