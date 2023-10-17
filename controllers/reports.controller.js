@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const puppeteer = require('puppeteer');
 const db = require('../util/database');
 
+
 exports.getReport = async (request, response, next) => {
     try {
         const reports = await ReportsModel.fetchAll();
@@ -54,11 +55,18 @@ exports.postReport = async (request, response, next) => {
 exports.getLeads = async (request, response, next) => {
     try {
         const leads = await ReportsModel.fetchLeads();
-        response.render('leads/report', { someData: data, leadColumns: yourLeadColumnsArray });
+        const leadColumns = await ReportsModel.fetchLeadColumns();
+        response.render('leads/report', { someData: leads, leadColumns: leadColumns });
     } catch(error) {
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
     }
+};
+
+exports.getLeadColumns = async () => {
+    const query = "SHOW COLUMNS FROM leads";
+    const [results] = await db.execute(query); // Usando db.execute en lugar de db.query
+    return results.map(row => row.Field);
 };
 
 exports.getLeadsData = async (request, response, next) => {

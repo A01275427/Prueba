@@ -19,5 +19,10 @@ module.exports = class ReportsModel{
         return db.execute('SELECT value, gain FROM leads');
     }
 
+    static fetchLeadColumns() {
+        return db.execute('SHOW COLUMNS FROM leads').then(([results]) => {
+            return results.map(row => row.Field);
+        });
+    }
 
 }

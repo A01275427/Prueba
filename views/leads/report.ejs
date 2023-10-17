@@ -33,7 +33,7 @@
         <form action="/ruta-de-procesamiento" method="POST">
             <label for="leadSelection">Selecciona un lead:</label>
             <select name="leadSelection" id="leadSelection">
-                <% leads.forEach(lead => { %>
+                <% someData.forEach(lead => { %>
                     <option value="<%= lead.id %>"><%= lead.company %></option>
                 <% }); %>
             </select>
@@ -45,7 +45,7 @@
             <form action="/ruta-de-procesamiento-columna" method="POST">
                 <label for="leadColumnSelection">Selecciona una columna:</label>
                 <select name="leadColumnSelection" id="leadColumnSelection">
-                    <% leadColumns.forEach(column => { %>
+                    <% someData.forEach(column => { %>
                         <option value="<%= column %>"><%= column %></option>
                     <% }); %>
                 </select>
@@ -84,10 +84,10 @@
                     const myBarChart = new Chart(ctxBar, {
                         type: 'bar',
                         data: {
-                            labels: <%- JSON.stringify(leads.map(lead => lead.value)) %>,
+                            labels: <%- JSON.stringify(someData.map(lead => lead.value)) %>,
                             datasets: [{
                                 label: '',
-                                data: <%- JSON.stringify(leads.map(lead => lead.gain)) %>,
+                                data: <%- JSON.stringify(someData.map(lead => lead.gain)) %>,
                                 backgroundColor: 'rgba(75, 192, 192, 0.2)', 
                                 borderColor: 'rgba(75, 192, 192, 1)',       
                                 borderWidth: 1                              
