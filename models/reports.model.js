@@ -16,7 +16,7 @@ module.exports = class ReportsModel{
     }
 
     static fetchLeads(){
-        return db.execute('SELECT value, gain FROM leads');
+        return db.execute('SELECT company, gain FROM leads');
     }
 
 
