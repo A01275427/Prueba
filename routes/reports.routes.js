@@ -13,7 +13,6 @@ router.get('/reports', reportsController.getLeadsData);
 
 router.get('/reports', isAuth, canUpload, canConsultR, canConsultUsers, canDownloadPDF, reportsController.getReport);
 router.post('/reports', isAuth, canUpload, canConsultR, canConsultUsers, canDownloadPDF,reportsController.postReport);
-router.get('/reports', reportsController.getLeads1);
 
 
 module.exports = router;

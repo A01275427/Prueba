@@ -1,14 +1,18 @@
 const ReportsModel = require('../models/reports.model');
 const bcrypt = require('bcryptjs');
 const puppeteer = require('puppeteer');
-
-
+const db = require('../util/database');
 
 exports.getReport = async (request, response, next) => {
     try {
         const reports = await ReportsModel.fetchAll();
+        const leads = await ReportsModel.fetchLeads();
+        const leadColumns = await ReportsModel.getLeadColumns(); // Asegúrate de que esta línea esté aquí
+
         response.render('leads/report.ejs', { 
             reports: reports,
+            leads: leads[0],
+            leadColumns: leadColumns, // Asegúrate de que esta línea esté aquí
             canUpload: request.canUpload,
             canConsultUsers: request.canConsultUsers,
             canConsultReports: request.canConsultReports,
@@ -17,6 +21,23 @@ exports.getReport = async (request, response, next) => {
     } catch (error) {
         console.error(error);
     }
+};
+
+
+
+exports.fetchAllCSV = async () => {
+    try {
+        const [rows, fields] = await db.execute('SELECT * FROM CSV');
+        return rows;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+exports.getLeadColumns = async () => {
+    const query = "SHOW COLUMNS FROM leads";
+    const results = await db.query(query); // Usando db en lugar de database
+    return results.map(row => row.Field);
 };
 
 exports.postReport = async (request, response, next) => {
@@ -30,22 +51,21 @@ exports.postReport = async (request, response, next) => {
     }
 };
 
-
 exports.getLeads = async (request, response, next) => {
-    try{
+    try {
         const leads = await ReportsModel.fetchLeads();
         response.render('leads/report.ejs', {leads: leads[0]});
-    }catch(error){
+    } catch(error) {
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
 
 exports.getLeadsData = async (request, response, next) => {
-    try{
+    try {
         const leadsData = await ReportsModel.fetchLeads();
         response.json(leadsData);
-    }catch(error){
+    } catch(error) {
         console.error(error);
         response.status(500).json({message: 'Error al obtener los leads'});
     }
@@ -72,25 +92,4 @@ exports.downloadReportPDF = async (request, response, next) => {
     }
 };
 
-/*
-// Agregar un nuevo reporte
-exports.addReport = async (reportData) => {
-    try {
-        const result = await db.execute('INSERT INTO reports SET ?', [reportData]);
-        return result;
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-
-// Obtener todos los reportes
-exports.fetchAll = async () => {
-    try {
-        const [rows, fields] = await db.execute('SELECT * FROM leads');
-        return rows;
-    } catch (error) {
-        console.error(error);
-    }
-};
-*/
+// Asumo que las funciones comentadas no son necesarias por ahora, así que las he omitido.
