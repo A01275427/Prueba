@@ -40,16 +40,21 @@
             <input type="submit" value="Mostrar Gráfica">
         </form>
 
-        <!-- Formulario para seleccionar una columna de la tabla leads -->
-        <form action="/ruta-de-procesamiento-columna" method="POST">
-            <label for="leadColumnSelection">Selecciona una columna:</label>
-            <select name="leadColumnSelection" id="leadColumnSelection">
-                <% leadColumns.forEach(column => { %>
-                    <option value="<%= column %>"><%= column %></option>
-                <% }); %>
-            </select>
-            <input type="submit" value="Mostrar Gráfica">
-        </form>
+        <% if (typeof leadColumns !== 'undefined' && leadColumns.length > 0) { %>
+            <!-- Formulario para seleccionar una columna de la tabla leads -->
+            <form action="/ruta-de-procesamiento-columna" method="POST">
+                <label for="leadColumnSelection">Selecciona una columna:</label>
+                <select name="leadColumnSelection" id="leadColumnSelection">
+                    <% leadColumns.forEach(column => { %>
+                        <option value="<%= column %>"><%= column %></option>
+                    <% }); %>
+                </select>
+                <input type="submit" value="Mostrar Gráfica">
+            </form>
+        <% } else { %>
+            <p>No hay columnas disponibles para seleccionar.</p>
+        <% } %>
+        
 
         <!-- Historial de archivos CSV cargados -->
         <h2>Historial de archivos CSV cargados</h2>
