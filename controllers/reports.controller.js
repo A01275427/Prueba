@@ -61,12 +61,17 @@ exports.getLeads = async (request, response, next) => {
     try {
         const leads = await ReportsModel.fetchLeads();
         const leadColumns = await ReportsModel.fetchLeadColumns();
-        response.render('leads/report', { leads: leads, leadColumns: leadColumns });
+        response.render('leads/report', { 
+            leads: leads, 
+            leadColumns: leadColumns,
+            _csrf: request.csrfToken() 
+        });
     } catch(error) {
         console.error(error);
         response.status(404).json({message: 'Error al obtener los leads'});
     }
 };
+
 
 exports.getLeadColumns = async () => {
     const query = "SHOW COLUMNS FROM leads";
@@ -83,6 +88,25 @@ exports.getLeadsData = async (request, response, next) => {
         response.status(500).json({message: 'Error al obtener los leads'});
     }
 };
+
+// reports.controller.js
+
+exports.postReport = async (request, response, next) => {
+    try {
+        const xAxisSelection = request.body.xAxis;
+        const yAxisSelection = request.body.yAxis;
+
+        // Aquí, obtén los datos de la base de datos basados en las selecciones
+        // Por ejemplo:
+        const data = await ReportsModel.getDataBasedOnSelections(xAxisSelection, yAxisSelection);
+
+        response.json(data);
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ message: 'Error al procesar el reporte' });
+    }
+};
+
 
 exports.downloadReportPDF = async (request, response, next) => {
     try {

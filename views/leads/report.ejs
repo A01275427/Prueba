@@ -73,18 +73,9 @@
         <br>
         
         <!-- Formulario para seleccionar datos de la tabla leads y los ejes X y Y -->
-        <form action="/ruta-de-procesamiento" method="POST" id="graphForm">
-
-            <!--
-
-                <label for="leadSelection">Selecciona un lead:</label>
-            <select name="leadSelection" id="leadSelection">
-                <% leads.forEach(lead => { %>
-                    <option value="<%= lead.id %>"><%= lead.company %></option>
-                <% }); %>
-            </select>
-
-            -->
+        <form id="graphForm">
+            <!-- Agregar el token CSRF al formulario -->
+            <input type="hidden" name="_csrf" value="<%= _csrf %>">
 
             <label for="xAxisSelection">Selecciona una columna para el eje X:</label>
             <select name="xAxisSelection" id="xAxisSelection">
@@ -136,7 +127,45 @@
         <script>
             document.getElementById('graphForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                // Aquí iría el código para generar las gráficas basadas en las selecciones de los formularios
+
+                const xAxisSelection = document.getElementById('xAxisSelection').value;
+                const yAxisSelection = document.getElementById('yAxisSelection').value;
+                const csrfToken = document.querySelector('input[name="_csrf"]').value; // Obtener el token CSRF
+
+                fetch('/reports/data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        xAxis: xAxisSelection,
+                        yAxis: yAxisSelection,
+                        _csrf: csrfToken // Enviar el token CSRF
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const barChart = new Chart(document.getElementById('barChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: data.xAxisData,
+                            datasets: [{
+                                label: yAxisSelection,
+                                data: data.yAxisData,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        }
+                    });
+
+                    // Puedes agregar lógica similar para las otras gráficas aquí
+
+                })
+                .catch(error => {
+                    console.error('Error al obtener los datos:', error);
+                });
+
                 document.getElementById('graphsSection').style.display = 'block';
             });
         </script>
