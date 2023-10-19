@@ -129,4 +129,5 @@ exports.downloadReportPDF = async (request, response, next) => {
     }
 };
 
+
 // Asumo que las funciones comentadas no son necesarias por ahora, así que las he omitido.

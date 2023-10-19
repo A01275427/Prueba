@@ -15,4 +15,6 @@ router.get('/reports', isAuth, canUpload, canConsultR, canConsultUsers, canDownl
 router.post('/reports/data', isAuth, canUpload, canConsultR, canConsultUsers, canDownloadPDF,reportsController.postReport);
 
 
+
+
 module.exports = router;
